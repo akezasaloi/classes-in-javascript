@@ -44,80 +44,81 @@ login_feature.simulate_attempts("admins");
 
 // Question 2
 
-// function TimeLog(freelancerName, projectDetails, logs) {
-//    this.freelancerName = freelancerName
-//    this.projectDetails = projectDetails
-//    this.logs = logs
-// }
+function TimeLog(freelancerName, projectDetails, logs) {
+   this.freelancerName = freelancerName,
+   this.projectDetails = projectDetails,
+   this.logs = logs
+}
+const freelancer1 = new TimeLog("Akeza Saloi", { name: "Akeza's Blog", rate: 100 },
+   [
+       { date: "2024-11-13", hoursWorked: 6 },
+       { date: "2024-11-12", hoursWorked: 9 },
+       { date: "2024-11-13", hoursWorked: 5 },
+       { date: "2024-11-14", hoursWorked: 1 },
+       { date: "2024-11-18", hoursWorked: 7 },
+       { date: "2024-11-17", hoursWorked: 1 },
+       { date: "2024-11-16", hoursWorked: 7 },
+       { date: "2024-11-15", hoursWorked: 1 },
 
+   ]
+);
+TimeLog.prototype.calculateEarnings = function () {
+const totalHours = this.logs.reduce((a, b) => a + b.hoursWorked, 0)
+   console.log(totalHours)
+  
+   const earnings = this.projectDetails.rate * totalHours
+   return earnings;
+}
+console.log(`You are earning ${freelancer1.calculateEarnings()}`);;
+// TimeLog.prototype.filterlogs = function (initialDate, finalDate) {
+//     return this.logs.filter(input => {
+//         const enteredDate = new Date(input.date);
+        
+//             return enteredDate;
+        
+//     });
+ 
+//  }
+// console.log( freelancer1.filterlogs("2025-12-11", "2025-02-07"));
 
-
-// TimeLog.prototype.totalEarnings = function () {
-//    const totalHoursWorked = this.logs.reduce((sum, hours) => sum + hours.hoursWorked, 0)
-//    console.log(totalHoursWorked)
-
-//    const earnings = this.projectDetails.rate * totalHoursWorked
-//    console.log(earnings)
-
-
-
-// }
-
-
-// TimeLog.prototype.filteredlogs = function (startDate, endDate) {
-//    return this.logs.filter(entry => {
-//        const logDate = new Date(entry.date);
-//        return logDate >= new Date(startDate) && logDate <= new Date(endDate);
-//    });
-
-// }
-
-// TimeLog.prototype.exceededWeeklyHours = function () {
+TimeLog.prototype.trackExceededHours = function () {
    
        
-//         const weeklyHours = this.logs.reduce((sum,log) => sum + log.hoursWorked,0);
-//         if (weeklyHours>40){
-//            return `${this.freelancerName}:Worked more than 40 hours this week`
-//         }else{
-//            return `${this.freelancerName}:Worked less than 40 hours this week`
+const totalHours = this.logs.reduce((a,b) => a + b.hoursWorked,0);
+if (totalHours>40){
+   return `${this.freelancerName} exceeded 40 hours at work this week.`
+}
+else{
+  return `${this.freelancerName} exceeded 40 hours at work this week.`
 
-//         } 
-// }
+  } 
+}
 
 
-
-
-// const freelancer1 = new TimeLog("Tierra Lebbie", { name: "Tierra Lebbie", rate: 1000 },
-//    [
-//        { date: "2025-02-15", hoursWorked: 10 },
-//        { date: "2025-02-16", hoursWorked: 2 },
-//        { date: "2025-03-17", hoursWorked: 3 },
-//        { date: "2025-03-18", hoursWorked: 4 },
-//        { date: "2025-03-19", hoursWorked: 5 },
-//        { date: "2025-03-20", hoursWorked: 6 },
-//        { date: "2025-03-21", hoursWorked: 7 },
-//        { date: "2025-03-22", hoursWorked: 8 },
-
-//    ]
-// )
-
-// freelancer1.totalEarnings()
-// console.log(freelancer1.filteredlogs("2025-05-15", "2025-03-27"))
-// console.log(freelancer1.exceededWeeklyHours())
+console.log(freelancer1.trackExceededHours())
 
 // // Question 3
 
-// function Order(customer, items, status) {
-//    this.customer = customer
-//    this.items = items
-//    this.status = status
-// }
-
-// Order.prototype.totalCost = function () {
-//    const total = this.items.reduce((sum, item) => sum + item.unitPrice, 0)
-//    return total
-// }
-
+function Order(customer, items, status) {
+   this.customer = customer,
+   this.items = items,
+   this.status = status
+}
+const firstOrder = new Order({ name: "Akeza", email: "saloi@gmail.com" },
+   [
+       { productName: "Dove Shampoo", quantity: 1, unitPrice: 800 },
+       { productName: "Bamsi conditioner", quantity: 3, unitPrice: 140 },
+       { productName: "Dove Shower gel", quantity: 2, unitPrice: 400 },
+       { productName: "Face mask", quantity: 30, unitPrice: 500 },
+       { productName: "Hair bands", quantity: 6, unitPrice: 200 }
+   ],
+   ""
+)
+Order.prototype.calculateBill = function () {
+   const bill = this.items.reduce((a, b) => a + b.unitPrice, 0)
+   return bill
+}
+console.log(`Your bill is ${firstOrder.calculateBill()} KES`)
 // Order.prototype.updateStatus = function (paymentReceived) {
 //    if (paymentReceived == "yes") {
 //        this.status = "Paid"
@@ -142,18 +143,8 @@ login_feature.simulate_attempts("admins");
 
 
 // }
-// const order1 = new Order({ name: "Umutoni", email: "umutoni@example.com" },
-//    [
-//        { productName: "Yorghurt", quantity: 10, unitPrice: 1600 },
-//        { productName: "Ice cream", quantity: 50, unitPrice: 1000 },
-//        { productName: "Armis", quantity: 20, unitPrice: 40 },
-//        { productName: "Milk", quantity: 100, unitPrice: 1000 },
-//        { productName: "Oats", quantity: 10, unitPrice: 500 }
-//    ],
-//    ""
-// )
+
 // console.log(order1)
-// console.log(order1.totalCost())
 // console.log(order1.updateStatus("yes"))
 // console.log(order1.orderUrgency())
 
