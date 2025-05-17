@@ -119,140 +119,50 @@ Order.prototype.calculateBill = function () {
    return bill
 }
 console.log(`Your bill is ${firstOrder.calculateBill()} KES`)
-// Order.prototype.updateStatus = function (paymentReceived) {
-//    if (paymentReceived == "yes") {
-//        this.status = "Paid"
-//    } else {
-//        this.status = "Pending"
-//    }
+Order.prototype.updateOrderStatus = function (billPaid) {
+  return billPaid ? this.status = "Paid" : this.status = "Pending";
 
-//    return this.status
-
-// }
-
-// Order.prototype.orderUrgency = function () {
-//    switch (this.status) {
-//        case "Paid":
-//            return "urgency:High";
-//            break;
-//        case "pending payment":
-//            return "urgency:Low"
-//        default:
-//            return "Make payment to see the urgency status"
-//    }
-
-
-// }
-
-// console.log(order1)
-// console.log(order1.updateStatus("yes"))
-// console.log(order1.orderUrgency())
+};
+console.log(firstOrder.updateOrderStatus(""));
+Order.prototype.categorizeOrder= function () {
+    let priority = "";
+   switch (this.status) {
+       case "Paid":
+            priority = "Very urgent";
+            break;
+       case "Pending":
+            priority = "Not urgent";
+            break;
+       default:
+            priority = "Order was cancelled";
+            break;
+   }
+   return priority;
+}
+console.log(firstOrder.categorizeOrder());
+console.log(firstOrder);
 
 
 // //Question 4
 
-// class Employee {
-//    constructor(id,name,performanceMetrics,feedback){
-//    this.id = id,
-//    this.name=name,
-//    this.performanceMetrics = performanceMetrics,
-//    this.feedback = feedback
-//    }
-// }
+class Employee {
+   constructor(id,name,performanceMetrics,feedback){
+   this.id = id,
+   this.name=name,
+   this.performanceMetrics = performanceMetrics,
+   this.feedback = feedback
+   }
+}
 
-// Employee.prototype.averageMarks= function (){
+const employees = [
+    new Employee (27, "Akeza Saloi",{communication:5,effiecincy:8,reliabity:6},[]),
+    new Employee(20,"Umutoni Jacky",{communication:4, effiecincy:9, reliabity:7},[])];
 
-//    const average = Object.values(this.performanceMetrics)
-//    return   average.reduce((a,b) => a+b,0)/average.length
+console.log(employees);
 
-// }
+Employee.prototype.calcAverageScore= function (){
 
-// Employee.prototype.performanceLevel = function (){
-//    const average = this.averageMarks()
-//    if(average>=7){
-//        return "Excellent"
-//    }else if (average >=5  && average <7){
-//        return "Very good"
-//    }else{
-//        return "Good"
-//    }
-// }
+ 
 
-// Employee.prototype.moreFeedback = function() {
-//    const average = this.averageMarks()
-//    if(average>=7){
-//        this.feedback = ["Excellent performance","Good improvement","You have made improvement on your communication skills"]
-
-
-//     }else if (average >=5  && average <7){
-//        this.feedback = ["Very good performance","You've greatly improved on your efficiency","Add more effort on your communication"]
-
-//    }else{
-//        this.feedback = ["Good performance","You have made improvement on your communication skills","You're performance is declining"]
-
-//    }
-
-//     return this.feedback
-// }
-
-
-
-// const employee1 = new Employee (
-//    1, "Queen Carine",
-//    {communication:5,effiecincy:8,reliabity:6},
-//   []
-// )
-
-// console.log(employee1.averageMarks())
-// console.log(employee1.performanceLevel())
-// console.log(employee1.moreFeedback())
-// console.log(employee1)
-
-
-
-
-// // Question 5
-
-// class Course{
-//    constructor(title,instructor,students){
-//           this.title = title
-//           this.instructor = instructor
-//           this.students = students
-//    }
-// }
-
-
-// Course.prototype.completedCourse = function (){
-//           return this.students.filter(student=> student.status === true).map(student => student.name);
-
-// }
-
-// Course.prototype.enrolled = function (courseName){
-//    return this.students.filter(student => student.expertise ===courseName).length
-
-// }
-
-// Course.prototype.instructorMessage = function (){
-//       if(this.students.length >5){
-//          return `Instructor ${this.instructor.name}: Your class has more than 5 students`
-//       }else{
-//        return `${this.instructor.name}: Your class has few students`
-//       }
-// }
-// const course1 = new Course(
-//    "Product Management",
-//    {name:"John Peter",expertise:"Python"},
-//    [
-//       {name:"Queen Carine",expertise:"Python",status:true},
-//       {name:"Queen Keza",expertise:"Data Science",status:true},
-//       {name:"Akeza Saloi",expertise:"Python",status:false},
-//       {name:"Kevine Umutoni",expertise:"Data Science",status:true},
-//       {name:"Jacqueline",expertise:"Research",status:true},
-//       {name:"Emeline",expertise:"Python",status:false}
-//    ]
-// )
-
-
-// console.log(course1.completedCourse())
-// console.log(course1.enrolled("Python"))
-// console.log(course1.instructorMessage("Python"))
+}
+console.log(employees.calcAverageScore);
