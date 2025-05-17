@@ -150,33 +150,35 @@ console.log(`Your bill is ${firstOrder.calculateBill()} KES`)
 
 
 // //Question 4
-
-// class Employee {
-//    constructor(id,name,performanceMetrics,feedback){
-//    this.id = id,
-//    this.name=name,
-//    this.performanceMetrics = performanceMetrics,
-//    this.feedback = feedback
-//    }
-// }
-
-// Employee.prototype.averageMarks= function (){
-
-//    const average = Object.values(this.performanceMetrics)
-//    return   average.reduce((a,b) => a+b,0)/average.length
-
-// }
-
-// Employee.prototype.performanceLevel = function (){
-//    const average = this.averageMarks()
-//    if(average>=7){
-//        return "Excellent"
-//    }else if (average >=5  && average <7){
-//        return "Very good"
-//    }else{
-//        return "Good"
-//    }
-// }
+class Employee {
+    constructor(id,name,performanceMetrics,feedback){
+    this.id = id,
+    this.name=name,
+    this.performanceMetrics = performanceMetrics,
+    this.feedback = feedback
+    }
+ }
+ 
+ const firstEmployee = new Employee (27, "Akeza Saloi",{communication:5,effiecincy:8,reliabity:6},[]);
+ 
+//  console.log(firstEmployee);
+ 
+//  Employee.prototype.calcAverageScore= function (){
+//  const averageScore = this.performanceMetrics.reduce((a,b)=> a+b,0);
+//   return averageScore/3;
+ 
+//  }
+//  console.log(firstEmployee.calcAverageScore());
+Employee.prototype.classifyPerformance = function (){
+   const average = this.averageMarks()
+   if(average>=7){
+       return "Excellent"
+   }else if (average >=5  && average <7){
+       return "Very good"
+   }else{
+       return "Good"
+   }
+}
 
 // Employee.prototype.moreFeedback = function() {
 //    const average = this.averageMarks()
@@ -194,21 +196,6 @@ console.log(`Your bill is ${firstOrder.calculateBill()} KES`)
 
 //     return this.feedback
 // }
-
-
-
-// const employee1 = new Employee (
-//    1, "Queen Carine",
-//    {communication:5,effiecincy:8,reliabity:6},
-//   []
-// )
-
-// console.log(employee1.averageMarks())
-// console.log(employee1.performanceLevel())
-// console.log(employee1.moreFeedback())
-// console.log(employee1)
-
-
 
 
 // // Question 5
