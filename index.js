@@ -89,7 +89,7 @@ if (totalHours>40){
    return `${this.freelancerName} exceeded 40 hours at work this week.`
 }
 else{
-  return `${this.freelancerName} exceeded 40 hours at work this week.`
+  return `${this.freelancerName} did not exceed 40 hours at work this week.`
 
   } 
 }
@@ -151,34 +151,40 @@ console.log(`Your bill is ${firstOrder.calculateBill()} KES`)
 
 // //Question 4
 class Employee {
-    constructor(id,name,performanceMetrics,feedback){
+    constructor(id,name,metrics,feedback){
     this.id = id,
     this.name=name,
-    this.performanceMetrics = performanceMetrics,
+    this.metrics = metrics,
     this.feedback = feedback
     }
  }
  
- const firstEmployee = new Employee (27, "Akeza Saloi",{communication:5,effiecincy:8,reliabity:6},[]);
+ const firstEmployee = new Employee (27, "Akeza Saloi",{communication:5,efficiency:8,reliabity:6},[]);
  
-//  console.log(firstEmployee);
+ console.log(firstEmployee);
  
-//  Employee.prototype.calcAverageScore= function (){
-//  const averageScore = this.performanceMetrics.reduce((a,b)=> a+b,0);
-//   return averageScore/3;
+ Employee.prototype.calcAverageScore = function (){
+ let averageScore = this.metrics.efficiency + this.metrics.communication + this.metrics.reliabity;
+  return (averageScore/3);
  
-//  }
-//  console.log(firstEmployee.calcAverageScore());
+ }
+ console.log(`Your average score is ${firstEmployee.calcAverageScore()}`);
+
 Employee.prototype.classifyPerformance = function (){
-   const average = this.averageMarks()
-   if(average>=7){
-       return "Excellent"
-   }else if (average >=5  && average <7){
-       return "Very good"
-   }else{
-       return "Good"
-   }
+    let level = "";
+    if(this.calcAverageScore > 5){
+        level = "Excellent";
+    }
+    else if (this.calcAverageScore == 5){
+        level = "Average";
+    }
+    else{
+        level = "Poor";
+    }
+    return level;
 }
+
+console.log(firstEmployee.classifyPerformance());
 
 // Employee.prototype.moreFeedback = function() {
 //    const average = this.averageMarks()
@@ -227,15 +233,15 @@ Employee.prototype.classifyPerformance = function (){
 //       }
 // }
 // const course1 = new Course(
-//    "Product Management",
-//    {name:"John Peter",expertise:"Python"},
+//    "Python",
+//    {name:"James Mwai",expertise:"Front-end"},
 //    [
-//       {name:"Queen Carine",expertise:"Python",status:true},
-//       {name:"Queen Keza",expertise:"Data Science",status:true},
-//       {name:"Akeza Saloi",expertise:"Python",status:false},
-//       {name:"Kevine Umutoni",expertise:"Data Science",status:true},
-//       {name:"Jacqueline",expertise:"Research",status:true},
-//       {name:"Emeline",expertise:"Python",status:false}
+//       {name:"Akeza Saloi",expertise:"Front-end",status:false},
+//       {name:"Judy Gikuni",expertise:"DAS",status:true},
+//       {name:"Karen Ngugi",expertise:"Ux Design",status:false},
+//       {name:"Mahder Belete Bekele",expertise:"DAS",status:true},
+//       {name:"Queen Carine",expertise:"Product Management",status:false},
+//       {name:"Arsema Aregawi",expertise:"Front-end",status:true}
 //    ]
 // )
 
