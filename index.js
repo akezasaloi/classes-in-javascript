@@ -1,4 +1,8 @@
 // Question 1
+// You are building a feature rollout system for a startup where a FeatureToggle constructor function has properties:
+//  featureName (string), isEnabled (boolean), and userGroupAccess (array of strings like "betaTesters", "admins"), and
+//  you must use a prototype method canAccess(userRole)to return true or false, a method toggleFeature(flag) to enable or 
+// disable the feature, and simulate access attempts using if-else and switch statements for different roles.
 
 function FeatureToggle (featureName,isEnabled,userGroupAccess){
     this.featureName = featureName;
@@ -11,52 +15,47 @@ FeatureToggle.prototype.canAccess = function(userRole){
     return this.userGroupAccess.includes(userRole);
 }
 
-FeatureToggle.prototype.toggleFeature = (flag)=>{
-    if(this.isEnabled==true){
-        return flag;
-    }
-    else{
-        console.log("Disabled");
-    }
-    // return flag;
+FeatureToggle.prototype.toggleFeature = function(flag) {
+    this.isEnabled = flag; 
 };
-
-FeatureToggle.prototype.simulate_attempts =(userRole)=>{
-       switch (userRole){
-           case "admins":
-               console.log(`Access confirmed`);
-               break;
-           case "betaTesters":
-               console.log(`Access confirmed`);
-               break;
-           case "developers":
-               console.log(`Access confirmed`);
-               break;
-           default:
-               console.log(`Access denied`);
-               break;
-       }
+FeatureToggle.prototype.simulate_attempts = function(userRole) {
+    if (!this.isEnabled) {
+        console.log("Feature is disabled");
+        return;
     }
-console.log(login_feature.canAccess("admins"));
-login_feature.toggleFeature("Enabled");
-login_feature.simulate_attempts("admins");
+    if (this.canAccess(userRole)) {
+        console.log("Access confirmed");
+    } else {
+        console.log("Access denied");
+    }
+}
+console.log(login_feature.canAccess("admins")); 
+login_feature.toggleFeature(true); 
+login_feature.simulate_attempts("admins"); 
+login_feature.simulate_attempts("guest"); 
+login_feature.toggleFeature(false); 
+login_feature.simulate_attempts("betaTesters"); 
 
 
 // Question 2
+// In a freelancer time-tracking platform, create a TimeLog constructor function with properties:
+//  freelancerName (string), projectDetails (object with name and hourlyRate), and logs 
+//  (array of objects with date, hoursWorked), then add prototype methods to calculate total 
+//  earnings, filter logs by date range, and determine if weekly hours exceed 40 using if-else logic.
 
 function TimeLog(freelancerName, projectDetails, logs) {
    this.freelancerName = freelancerName,
    this.projectDetails = projectDetails,
    this.logs = logs
 }
-const freelancer1 = new TimeLog("Akeza Saloi", { name: "Akeza's Blog", rate: 100 },
+const freelancer1 = new TimeLog("Akeza Saloi", { name: "Akeza's Blog", hourlyRate: 100 },
    [
        { date: "2024-11-13", hoursWorked: 6 },
-       { date: "2024-11-12", hoursWorked: 9 },
+       { date: "2024-11-12", hoursWorked: 19 },
        { date: "2024-11-13", hoursWorked: 5 },
        { date: "2024-11-14", hoursWorked: 1 },
        { date: "2024-11-18", hoursWorked: 7 },
-       { date: "2024-11-17", hoursWorked: 1 },
+       { date: "2024-11-17", hoursWorked: 11 },
        { date: "2024-11-16", hoursWorked: 7 },
        { date: "2024-11-15", hoursWorked: 1 },
 
@@ -66,20 +65,21 @@ TimeLog.prototype.calculateEarnings = function () {
 const totalHours = this.logs.reduce((a, b) => a + b.hoursWorked, 0)
    console.log(totalHours)
   
-   const earnings = this.projectDetails.rate * totalHours
+   const earnings = this.projectDetails.hourlyRate * totalHours
    return earnings;
 }
-console.log(`You are earning ${freelancer1.calculateEarnings()}`);;
-// TimeLog.prototype.filterlogs = function (initialDate, finalDate) {
-//     return this.logs.filter(input => {
-//         const enteredDate = new Date(input.date);
-        
-//             return enteredDate;
-        
-//     });
- 
-//  }
-// console.log( freelancer1.filterlogs("2025-12-11", "2025-02-07"));
+console.log(`You are earning ${freelancer1.calculateEarnings()}`);
+
+TimeLog.prototype.filterLogs = function (initialDate, finalDate) {
+    const start = new Date(initialDate);
+    const end = new Date(finalDate);
+    return this.logs.filter(log => {
+        const logDate = new Date(log.date);
+        return logDate >= start && logDate <= end;
+    });
+};
+
+console.log(freelancer1.filterLogs("2024-11-12", "2024-11-15"));
 
 TimeLog.prototype.trackExceededHours = function () {
    
@@ -89,15 +89,19 @@ if (totalHours>40){
    return `${this.freelancerName} exceeded 40 hours at work this week.`
 }
 else{
-  return `${this.freelancerName} exceeded 40 hours at work this week.`
+  return `${this.freelancerName} did not exceed 40 hours at work this week.`
 
   } 
 }
 
-
 console.log(freelancer1.trackExceededHours())
 
-// // Question 3
+//Question 3
+// You are developing a startup’s order management system where an Order constructor 
+// function should contain customer (object with name and email), items (array of objects 
+// with productName, quantity, and unitPrice), and status (string), then implement 
+// prototype methods to compute total cost, update order status based on payment, 
+// and categorize order urgency using switch and conditional statements.
 
 function Order(customer, items, status) {
    this.customer = customer,
@@ -112,18 +116,21 @@ const firstOrder = new Order({ name: "Akeza", email: "saloi@gmail.com" },
        { productName: "Face mask", quantity: 30, unitPrice: 500 },
        { productName: "Hair bands", quantity: 6, unitPrice: 200 }
    ],
-   ""
+   
 )
 Order.prototype.calculateBill = function () {
-   const bill = this.items.reduce((a, b) => a + b.unitPrice, 0)
-   return bill
-}
+    const bill = this.items.reduce((total, item) => total + (item.unitPrice * item.quantity), 0);
+    return bill;
+ };
 console.log(`Your bill is ${firstOrder.calculateBill()} KES`)
 Order.prototype.updateOrderStatus = function (billPaid) {
   return billPaid ? this.status = "Paid" : this.status = "Pending";
 
 };
+
 console.log(firstOrder.updateOrderStatus(""));
+
+
 Order.prototype.categorizeOrder= function () {
     let priority = "";
    switch (this.status) {
@@ -139,30 +146,101 @@ Order.prototype.categorizeOrder= function () {
    }
    return priority;
 }
+
+console.log(firstOrder.updateOrderStatus(true));
 console.log(firstOrder.categorizeOrder());
 console.log(firstOrder);
 
 
-// //Question 4
+//Question 4
+// In a startup’s employee review tool, design an Employee class with properties: id (number),
+//  name (string), performanceMetrics (object with keys like communication, efficiency, and
+//  reliability), and feedback (array of strings), then use prototypes to calculate an average
+//  score, classify performance level using control flow, and add new feedback based on conditions.
 
 class Employee {
-   constructor(id,name,performanceMetrics,feedback){
-   this.id = id,
-   this.name=name,
-   this.performanceMetrics = performanceMetrics,
-   this.feedback = feedback
-   }
-}
-
-const employees = [
-    new Employee (27, "Akeza Saloi",{communication:5,effiecincy:8,reliabity:6},[]),
-    new Employee(20,"Umutoni Jacky",{communication:4, effiecincy:9, reliabity:7},[])];
-
-console.log(employees);
-
-Employee.prototype.calcAverageScore= function (){
-
+    constructor(id,name,performanceMetrics,feedback){
+    this.id = id,
+    this.name=name,
+    this.performanceMetrics = performanceMetrics,
+    this.feedback = feedback
+    }
+ }
+ const firstEmployee = new Employee (27, "Akeza Saloi",{communication:5,efficiency:8,reliability:6},[]);
+ console.log(firstEmployee);
+ Employee.prototype.calcAverageScore = function (){
+ const scores =  Object.values(this.performanceMetrics);
+ const totalScores = scores.reduce((a, b) => a + b, 0);
+  return totalScores / scores.length;
+ }
+ console.log(`Your average score is ${firstEmployee.calcAverageScore()}`);
+ Employee.prototype.classifyPerformance = function () {
+     const avg = this.calcAverageScore();
+     if (avg >= 8) {
+        return "Excellent work";
+     } else if (avg >= 7) {
+        return "Good job";
+     } else {
+        return "Please improve your performance";
+     }
+  };
+  console.log(`Performance level: ${firstEmployee.classifyPerformance()}`);
+  Employee.prototype.addFeedback = function (feedbackMessage) {
+     const avg = this.calcAverageScore();
+     if (avg >= 7) {
+        this.feedback.push(feedbackMessage);
+        return "Feedback given";
+     } else {
+        return "No feedback given, employee unqualified";
+     }
+ };
+  console.log(firstEmployee.addFeedback("Excellent work on your project!"));
+  console.log(firstEmployee.feedback);
  
+ 
+ 
+//  Question 5
+// Build a simple e-learning system where a Course class has properties: 
+// title (string), instructor (object with name and expertise), and students 
+// (array of objects with name and completionStatus), then add prototype 
+// methods to return names of students who completed the course, count 
+// enrolled students by expertise area, and use control flow to output 
+// different messages for instructors with more or less than 5 students.
 
+class Course {
+    constructor(title, instructor) {
+        this.title = title;
+        this.instructor = instructor;
+        this.students = [];
+    }
+    enrollStudent(studentName, hasCompleted) {
+        this.students.push({ studentName, hasCompleted });
+    }
+    completedStudentNames() {
+        return this.students
+            .filter(s => s.hasCompleted)
+            .map(s => s.studentName);
+    }
+    countEnrolled() {
+     
+        return { [this.instructor.expertise]: this.students.length };
+    }
+    instructorNotice() {
+        if (this.students.length > 5) {
+            return `${this.instructor.name} has a large class with ${this.students.length} students.`;
+        } else {
+            return `${this.instructor.name} has a class with ${this.students.length} students.`;
+        }
+    }
 }
-console.log(employees.calcAverageScore);
+
+const instructor = { name: "Cromwel", expertise: "QA" };
+const qaCourse = new Course("Quality Assurance", instructor);
+qaCourse.enrollStudent("Akeza", true);
+qaCourse.enrollStudent("Saloi", false);
+qaCourse.enrollStudent("Judy", true);
+qaCourse.enrollStudent("Helen", true);
+
+console.log(qaCourse.completedStudentNames()); 
+console.log(qaCourse.countEnrolled());         
+console.log(qaCourse.instructorNotice());  
