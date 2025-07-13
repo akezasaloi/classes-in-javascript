@@ -11,52 +11,44 @@ FeatureToggle.prototype.canAccess = function(userRole){
     return this.userGroupAccess.includes(userRole);
 }
 
-FeatureToggle.prototype.toggleFeature = (flag)=>{
-    if(this.isEnabled==true){
-        return flag;
-    }
-    else{
-        console.log("Disabled");
-    }
-    // return flag;
+FeatureToggle.prototype.toggleFeature = function(flag) {
+    this.isEnabled = flag; 
 };
-
-FeatureToggle.prototype.simulate_attempts =(userRole)=>{
-       switch (userRole){
-           case "admins":
-               console.log(`Access confirmed`);
-               break;
-           case "betaTesters":
-               console.log(`Access confirmed`);
-               break;
-           case "developers":
-               console.log(`Access confirmed`);
-               break;
-           default:
-               console.log(`Access denied`);
-               break;
-       }
+FeatureToggle.prototype.simulate_attempts = function(userRole) {
+    if (!this.isEnabled) {
+        console.log("Feature is disabled");
+        return;
     }
-console.log(login_feature.canAccess("admins"));
-login_feature.toggleFeature("Enabled");
-login_feature.simulate_attempts("admins");
+    if (this.canAccess(userRole)) {
+        console.log("Access confirmed");
+    } else {
+        console.log("Access denied");
+    }
+}
+console.log(login_feature.canAccess("admins")); 
+login_feature.toggleFeature(true); 
+login_feature.simulate_attempts("admins"); 
+login_feature.simulate_attempts("guest"); 
+login_feature.toggleFeature(false); 
+login_feature.simulate_attempts("betaTesters"); 
 
 
 // Question 2
+
 
 function TimeLog(freelancerName, projectDetails, logs) {
    this.freelancerName = freelancerName,
    this.projectDetails = projectDetails,
    this.logs = logs
 }
-const freelancer1 = new TimeLog("Akeza Saloi", { name: "Akeza's Blog", rate: 100 },
+const freelancer1 = new TimeLog("Akeza Saloi", { name: "Akeza's Blog", hourlyRate: 100 },
    [
        { date: "2024-11-13", hoursWorked: 6 },
-       { date: "2024-11-12", hoursWorked: 9 },
+       { date: "2024-11-12", hoursWorked: 19 },
        { date: "2024-11-13", hoursWorked: 5 },
        { date: "2024-11-14", hoursWorked: 1 },
        { date: "2024-11-18", hoursWorked: 7 },
-       { date: "2024-11-17", hoursWorked: 1 },
+       { date: "2024-11-17", hoursWorked: 11 },
        { date: "2024-11-16", hoursWorked: 7 },
        { date: "2024-11-15", hoursWorked: 1 },
 
@@ -66,20 +58,21 @@ TimeLog.prototype.calculateEarnings = function () {
 const totalHours = this.logs.reduce((a, b) => a + b.hoursWorked, 0)
    console.log(totalHours)
   
-   const earnings = this.projectDetails.rate * totalHours
+   const earnings = this.projectDetails.hourlyRate * totalHours
    return earnings;
 }
-console.log(`You are earning ${freelancer1.calculateEarnings()}`);;
-// TimeLog.prototype.filterlogs = function (initialDate, finalDate) {
-//     return this.logs.filter(input => {
-//         const enteredDate = new Date(input.date);
-        
-//             return enteredDate;
-        
-//     });
- 
-//  }
-// console.log( freelancer1.filterlogs("2025-12-11", "2025-02-07"));
+console.log(`You are earning ${freelancer1.calculateEarnings()}`);
+
+TimeLog.prototype.filterLogs = function (initialDate, finalDate) {
+    const start = new Date(initialDate);
+    const end = new Date(finalDate);
+    return this.logs.filter(log => {
+        const logDate = new Date(log.date);
+        return logDate >= start && logDate <= end;
+    });
+};
+
+console.log(freelancer1.filterLogs("2024-11-12", "2024-11-15"));
 
 TimeLog.prototype.trackExceededHours = function () {
    
@@ -94,10 +87,10 @@ else{
   } 
 }
 
-
 console.log(freelancer1.trackExceededHours())
 
-// // Question 3
+//Question 3
+
 
 function Order(customer, items, status) {
    this.customer = customer,
@@ -112,140 +105,125 @@ const firstOrder = new Order({ name: "Akeza", email: "saloi@gmail.com" },
        { productName: "Face mask", quantity: 30, unitPrice: 500 },
        { productName: "Hair bands", quantity: 6, unitPrice: 200 }
    ],
-   ""
+   
 )
 Order.prototype.calculateBill = function () {
-   const bill = this.items.reduce((a, b) => a + b.unitPrice, 0)
-   return bill
-}
+    const bill = this.items.reduce((total, item) => total + (item.unitPrice * item.quantity), 0);
+    return bill;
+ };
 console.log(`Your bill is ${firstOrder.calculateBill()} KES`)
-// Order.prototype.updateStatus = function (paymentReceived) {
-//    if (paymentReceived == "yes") {
-//        this.status = "Paid"
-//    } else {
-//        this.status = "Pending"
-//    }
 
-//    return this.status
+Order.prototype.updateOrderStatus = function (billPaid) {
+  return billPaid ? this.status = "Paid" : this.status = "Pending";
 
-// }
+};
 
-// Order.prototype.orderUrgency = function () {
-//    switch (this.status) {
-//        case "Paid":
-//            return "urgency:High";
-//            break;
-//        case "pending payment":
-//            return "urgency:Low"
-//        default:
-//            return "Make payment to see the urgency status"
-//    }
+console.log(firstOrder.updateOrderStatus(""));
 
 
-// }
+Order.prototype.categorizeOrder= function () {
+    let priority = "";
+   switch (this.status) {
+       case "Paid":
+            priority = "Very urgent";
+            break;
+       case "Pending":
+            priority = "Not urgent";
+            break;
+       default:
+            priority = "Order was cancelled";
+            break;
+   }
+   return priority;
+}
 
-// console.log(order1)
-// console.log(order1.updateStatus("yes"))
-// console.log(order1.orderUrgency())
+console.log(firstOrder.updateOrderStatus(true));
+console.log(firstOrder.categorizeOrder());
+console.log(firstOrder);
 
 
-// //Question 4
+//Question 4
+
+
 class Employee {
-    constructor(id,name,metrics,feedback){
+    constructor(id,name,performanceMetrics,feedback){
     this.id = id,
     this.name=name,
-    this.metrics = metrics,
+    this.performanceMetrics = performanceMetrics,
     this.feedback = feedback
     }
  }
- 
- const firstEmployee = new Employee (27, "Akeza Saloi",{communication:5,efficiency:8,reliabity:6},[]);
- 
+ const firstEmployee = new Employee (27, "Akeza Saloi",{communication:5,efficiency:8,reliability:6},[]);
  console.log(firstEmployee);
- 
  Employee.prototype.calcAverageScore = function (){
- let averageScore = this.metrics.efficiency + this.metrics.communication + this.metrics.reliabity;
-  return (averageScore/3);
- 
+ const scores =  Object.values(this.performanceMetrics);
+ const totalScores = scores.reduce((a, b) => a + b, 0);
+  return totalScores / scores.length;
  }
  console.log(`Your average score is ${firstEmployee.calcAverageScore()}`);
+ Employee.prototype.classifyPerformance = function () {
+     const avg = this.calcAverageScore();
+     if (avg >= 8) {
+        return "Excellent work";
+     } else if (avg >= 7) {
+        return "Good job";
+     } else {
+        return "Please improve your performance";
+     }
+  };
+  console.log(`Performance level: ${firstEmployee.classifyPerformance()}`);
+  Employee.prototype.addFeedback = function (feedbackMessage) {
+     const avg = this.calcAverageScore();
+     if (avg >= 7) {
+        this.feedback.push(feedbackMessage);
+        return "Feedback given";
+     } else {
+        return "No feedback given, employee unqualified";
+     }
+ };
+  console.log(firstEmployee.addFeedback("Excellent work on your project!"));
+  console.log(firstEmployee.feedback);
+ 
+ 
+ 
+//  Question 5
 
-Employee.prototype.classifyPerformance = function (){
-    let level = "";
-    if(this.calcAverageScore > 5){
-        level = "Excellent";
+
+class Course {
+    constructor(title, instructor) {
+        this.title = title;
+        this.instructor = instructor;
+        this.students = [];
     }
-    else if (this.calcAverageScore == 5){
-        level = "Average";
+    enrollStudent(studentName, hasCompleted) {
+        this.students.push({ studentName, hasCompleted });
     }
-    else{
-        level = "Poor";
+    completedStudentNames() {
+        return this.students
+            .filter(s => s.hasCompleted)
+            .map(s => s.studentName);
     }
-    return level;
+    countEnrolled() {
+     
+        return { [this.instructor.expertise]: this.students.length };
+    }
+    instructorNotice() {
+        if (this.students.length > 5) {
+            return `${this.instructor.name} has a large class with ${this.students.length} students.`;
+        } else {
+            return `${this.instructor.name} has a class with ${this.students.length} students.`;
+        }
+    }
 }
 
-console.log(firstEmployee.classifyPerformance());
 
-// Employee.prototype.moreFeedback = function() {
-//    const average = this.averageMarks()
-//    if(average>=7){
-//        this.feedback = ["Excellent performance","Good improvement","You have made improvement on your communication skills"]
+const instructor = { name: "Cromwel", expertise: "QA" };
+const qaCourse = new Course("Quality Assurance", instructor);
+qaCourse.enrollStudent("Akeza", true);
+qaCourse.enrollStudent("Saloi", false);
+qaCourse.enrollStudent("Judy", true);
+qaCourse.enrollStudent("Helen", true);
 
-
-//     }else if (average >=5  && average <7){
-//        this.feedback = ["Very good performance","You've greatly improved on your efficiency","Add more effort on your communication"]
-
-//    }else{
-//        this.feedback = ["Good performance","You have made improvement on your communication skills","You're performance is declining"]
-
-//    }
-
-//     return this.feedback
-// }
-
-
-// // Question 5
-
-// class Course{
-//    constructor(title,instructor,students){
-//           this.title = title
-//           this.instructor = instructor
-//           this.students = students
-//    }
-// }
-
-
-// Course.prototype.completedCourse = function (){
-//           return this.students.filter(student=> student.status === true).map(student => student.name);
-
-// }
-
-// Course.prototype.enrolled = function (courseName){
-//    return this.students.filter(student => student.expertise ===courseName).length
-
-// }
-
-// Course.prototype.instructorMessage = function (){
-//       if(this.students.length >5){
-//          return `Instructor ${this.instructor.name}: Your class has more than 5 students`
-//       }else{
-//        return `${this.instructor.name}: Your class has few students`
-//       }
-// }
-// const course1 = new Course(
-//    "Python",
-//    {name:"James Mwai",expertise:"Front-end"},
-//    [
-//       {name:"Akeza Saloi",expertise:"Front-end",status:false},
-//       {name:"Judy Gikuni",expertise:"DAS",status:true},
-//       {name:"Karen Ngugi",expertise:"Ux Design",status:false},
-//       {name:"Mahder Belete Bekele",expertise:"DAS",status:true},
-//       {name:"Queen Carine",expertise:"Product Management",status:false},
-//       {name:"Arsema Aregawi",expertise:"Front-end",status:true}
-//    ]
-// )
-
-
-// console.log(course1.completedCourse())
-// console.log(course1.enrolled("Python"))
-// console.log(course1.instructorMessage("Python"))
+console.log(qaCourse.completedStudentNames()); 
+console.log(qaCourse.countEnrolled());         
+console.log(qaCourse.instructorNotice());  
