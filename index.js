@@ -222,7 +222,7 @@ const qaCourse = new Course("Quality Assurance", instructor);
 qaCourse.enrollStudent("Akeza", true);
 qaCourse.enrollStudent("Saloi", false);
 qaCourse.enrollStudent("Judy", true);
-qaCourse.enrollStudent("Helen", true);
+qaCourse.enrollStudent("Helen", false);
 
 console.log(qaCourse.completedStudentNames()); 
 console.log(qaCourse.countEnrolled());         
